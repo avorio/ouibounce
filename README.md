@@ -1,11 +1,11 @@
 # Ouibounce
-> Built by [Carl Sednaoui](http://carlsednaoui.com/about?utm_source=github&utm_medium=ouibounce-description&utm_campaign=carl-sednaoui) — Marketing Engineer at [Thinkful](http://www.thinkful.com?utm_source=github&utm_medium=ouibounce-description&utm_campaign=carl-sednaoui), Co-Creator of [MailCharts](http://www.mailcharts.com/?utm_source=github&utm_medium=ouibounce-description&utm_campaign=carl-sednaoui).  
+> Originally created by [Carl Sednaoui](http://carlsednaoui.com/about?utm_source=github&utm_medium=ouibounce-description&utm_campaign=carlsednaoui) from [MailCharts](http://www.mailcharts.com/?utm_source=github&utm_medium=ouibounce-description&utm_campaign=carlsednaoui). Maintained and improved by [generous contributors](https://github.com/carlsednaoui/ouibounce/graphs/contributors). 
 
 
 
 [![tests](http://img.shields.io/travis/carlsednaoui/ouibounce.svg?style=flat)](https://travis-ci.org/carlsednaoui/ouibounce) [![twitter](http://img.shields.io/badge/twitter-@carlsednaoui-blue.svg?style=flat)](http://twitter.com/carlsednaoui)
 
-A small library enabling you to display a modal before a user leaves your website.
+Ouibounce: A small library enabling you to display a modal before a user leaves your website.
 
 ![](http://cl.ly/image/2C2p0l3W1M00/ouibounce.gif)
 
@@ -30,6 +30,16 @@ Not sure what I mean by _provide value_? Here are a few ideas to get your creati
 - [Example #1](http://carlsednaoui.github.io/ouibounce/)
 - [Example #2](http://colors.carlsednaoui.com/)
 
+## Modal inspiration
+
+I've designed a few modals just for you. Feel free to use these as inspiration.
+
+![fancy with content](https://cloud.githubusercontent.com/assets/791818/5060267/60768e64-6d1a-11e4-813e-b4c6f9ea4e9f.png)
+![fancy no header](https://cloud.githubusercontent.com/assets/791818/5060264/6071f214-6d1a-11e4-8a4b-ae929b337a3f.png)
+![simple](https://cloud.githubusercontent.com/assets/791818/5060268/607786e8-6d1a-11e4-9084-3430e2a158d8.png)
+![simple with book](https://cloud.githubusercontent.com/assets/791818/5060673/025d51a2-6d31-11e4-85eb-362f8dc9ccc0.png)
+![simple with feedback](https://cloud.githubusercontent.com/assets/791818/5060266/6075d2b2-6d1a-11e4-891a-40a16465aa9a.png)
+
 
 ## Installation
 
@@ -38,7 +48,7 @@ You have a few options to choose from:
 - Download the [minified](build/ouibounce.min.js) or [unminified](build/ouibounce.js) script and include it on your page
 - Get Ouibounce from [cdnjs.com](http://cdnjs.com/libraries/ouibounce/)
 - Use Bower: `curl http://bower.herokuapp.com/packages/ouibounce`
-- Use NPM: `npm install git://github.com/carlsednaoui/ouibounce.git`
+- Use NPM: `npm install ouibounce`
 
 _Note_: Ouibounce is wrapped by a [umd wrapper](https://github.com/ForbesLindesay/umd), so if you are using _requirejs/amd_ or _commonjs/browserify_, it will still work fine.
 
@@ -75,6 +85,7 @@ Ouibounce offers a few options, such as:
 - [Callback](#callback)
 - [Cookie expiration](#cookie-expiration)
 - [Cookie domain](#cookie-domain)
+- [Cookie name](#cookie-name)
 - [Sitewide cookie](#sitewide-cookie)
 - [Chaining options](#chaining-options)
 
@@ -145,6 +156,14 @@ ouibounce(document.getElementById('ouibounce-modal'), { cookieDomain:
 '.example.com' });
 ```
 
+##### Cookie name
+You can specify cookie name passing `cookieName: 'customCookieName'`.
+
+_Example:_    
+```js
+ouibounce(document.getElementById('ouibounce-modal'), { cookieName: 'customCookieName' });
+```
+
 ##### Sitewide cookie
 You can drop sitewide cookies by using passing `sitewide: true`.
 
@@ -183,6 +202,7 @@ modal.disable({ cookieExpire: 50, sitewide: true }) // disable ouibounce sitewid
 The `disable` function accepts a few options:
 - [Cookie expiration](#cookie-expiration)
 - [Cookie domain](#cookie-domain)
+- [Cookie name](#cookie-name)
 - [Sitewide cookie](#sitewide-cookie)
 
 ### Using Ouibounce with other libraries
@@ -195,11 +215,16 @@ var _ouibounce = ouibounce(false, {
 });
 ```
 
+##### Twitter Bootstrap
+If you're trying to use Ouibounce with Twitter Bootstrap and are simply copying the example code I've included in the demo, you might run into some problems. See #[66](https://github.com/carlsednaoui/ouibounce/issues/66) to fix this.
+
 ### Legacy JS engines
 If you'd like Ouibounce to work in legacy JS engines (IE8 and below, for example), you'll need to add a shim such as [es5-shim](https://github.com/es-shims/es5-shim).
 
 ### WordPress
-[Kevin Weber](http://kevinw.de/wbounce) wrote [wBounce](https://wordpress.org/plugins/wbounce/), a WordPress plugin. I personally have __not__ tested it, but you should check it out.
+[Tomaž](https://github.com/tomazzaman) wrote [a great tutorial](https://codeable.io/community/how-to-build-your-own-wordpress-email-form-optin-form/) on how to build your own WordPress opt-in form.
+
+[Kevin Weber](http://kevinw.de/wbounce) wrote [wBounce](https://wordpress.org/plugins/wbounce/), a WordPress plugin. I personally have __not__ tested it, but have heard it works really well. Check it out.
 
 ### Miscellaneous
 

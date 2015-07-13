@@ -1,5 +1,7 @@
-function ouibounce(el, config) {
-  var config     = config || {},
+function ouibounce(el, custom_config) {
+  "use strict";
+
+  var config     = custom_config || {},
     aggressive   = config.aggressive || false,
     sensitivity  = setDefault(config.sensitivity, 20),
     timer        = setDefault(config.timer, 1000),
@@ -7,6 +9,7 @@ function ouibounce(el, config) {
     callback     = config.callback || function() {},
     cookieExpire = setDefaultCookieExpire(config.cookieExpire) || '',
     cookieDomain = config.cookieDomain ? ';domain=' + config.cookieDomain : '',
+    cookieName   = config.cookieName ? config.cookieName : 'viewedOuibounceModal',
     sitewide     = config.sitewide === true ? ';path=/' : '',
     _delayTimer  = null,
     _html        = document.documentElement;
@@ -27,18 +30,20 @@ function ouibounce(el, config) {
 
   setTimeout(attachOuiBounce, timer);
   function attachOuiBounce() {
+    if (isDisabled()) { return; }
+
     _html.addEventListener('mouseleave', handleMouseleave);
     _html.addEventListener('mouseenter', handleMouseenter);
     _html.addEventListener('keydown', handleKeydown);
   }
 
   function handleMouseleave(e) {
-    if (e.clientY > sensitivity || (checkCookieValue('viewedOuibounceModal', 'true') && !aggressive)) return;
+    if (e.clientY > sensitivity) { return; }
 
-    _delayTimer = setTimeout(_fireAndCallback, delay);
+    _delayTimer = setTimeout(fire, delay);
   }
 
-  function handleMouseenter(e) {
+  function handleMouseenter() {
     if (_delayTimer) {
       clearTimeout(_delayTimer);
       _delayTimer = null;
@@ -47,11 +52,11 @@ function ouibounce(el, config) {
 
   var disableKeydown = false;
   function handleKeydown(e) {
-    if (disableKeydown || checkCookieValue('viewedOuibounceModal', 'true') && !aggressive) return;
-    else if(!e.metaKey || e.keyCode !== 76) return;
+    if (disableKeydown) { return; }
+    else if(!e.metaKey || e.keyCode !== 76) { return; }
 
     disableKeydown = true;
-    _delayTimer = setTimeout(_fireAndCallback, delay);
+    _delayTimer = setTimeout(fire, delay);
   }
 
   function checkCookieValue(cookieName, value) {
@@ -61,7 +66,7 @@ function ouibounce(el, config) {
   function parseCookies() {
     // cookies are separated by '; '
     var cookies = document.cookie.split('; ');
-    
+
     var ret = {};
     for (var i = cookies.length - 1; i >= 0; i--) {
       var el = cookies[i].split('=');
@@ -70,20 +75,23 @@ function ouibounce(el, config) {
     return ret;
   }
 
-  function _fireAndCallback() {
-    fire();
-    callback();
+  function isDisabled() {
+    return checkCookieValue(cookieName, 'true') && !aggressive;
   }
 
+  // You can use ouibounce without passing an element
+  // https://github.com/carlsednaoui/ouibounce/issues/30
   function fire() {
-    // You can use ouibounce without passing an element
-    // https://github.com/carlsednaoui/ouibounce/issues/30
-    if (el) el.style.display = 'block';
+    if (isDisabled()) { return; }
+
+    if (el) { el.style.display = 'block'; }
+
+    callback();
     disable();
   }
 
-  function disable(options) {
-    var options = options || {};
+  function disable(custom_options) {
+    var options = custom_options || {};
 
     // you can pass a specific cookie expiration when using the OuiBounce API
     // ex: _ouiBounce.disable({ cookieExpire: 5 });
@@ -103,7 +111,11 @@ function ouibounce(el, config) {
       cookieDomain = ';domain=' + options.cookieDomain;
     }
 
-    document.cookie = 'viewedOuibounceModal=true' + cookieExpire + cookieDomain + sitewide;
+    if (typeof options.cookieName !== 'undefined') {
+      cookieName = options.cookieName;
+    }
+
+    document.cookie = cookieName + '=true' + cookieExpire + cookieDomain + sitewide;
 
     // remove listeners
     _html.removeEventListener('mouseleave', handleMouseleave);
@@ -113,6 +125,9 @@ function ouibounce(el, config) {
 
   return {
     fire: fire,
-    disable: disable
+    disable: disable,
+    isDisabled: isDisabled
   };
 }
+
+/*exported ouibounce */
